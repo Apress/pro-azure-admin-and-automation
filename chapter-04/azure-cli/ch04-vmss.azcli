@@ -1,0 +1,40 @@
+# Set variables
+$rgName         = 'apress-ch04-rg'
+$location       = 'northeurope'
+$vnetName       = 'apress-ch04-vnet'
+$subnetName     = 'vmss-servers'
+$addressPrefix  = '10.123.0.0/16'
+$subnetIPRange  = '10.123.1.0/24'
+$nsgName        = "$vnetName-nsg"
+$vmssName       = 'apressvmss'
+$vmssSize       = 'Standard_B1s'
+$galleryImageId = '/subscriptions/62cc79e0-66dd-4bb9-9aa0-77fdf43493da/resourceGroups/cmd-images/providers/Microsoft.Compute/galleries/image_gallery/images/learn-azure-nginx/versions/3.0.0'
+$lbName         = "$vmssName-lb"
+$lbPipName      = "$lbName-pip"
+$adminUsername  = 'apressadmin'
+$adminPassword  = 'Pa$$w0rd1234'
+$tags           = 'deployment-method=azure-cli'
+
+# Create a resource group
+az group create --name $rgName --location $location --tags $tags
+
+# Create network security group, virtual network, and subnet for the VMSS
+az network nsg create --name $nsgName --resource-group $rgName --location $location --tags $tags
+az network nsg rule create --resource-group $rgName --nsg-name $nsgName --name allow-remote-access --priority 100 --source-address-prefixes * --destination-port-ranges 22 80 --destination-address-prefixes * --access Allow --protocol Tcp
+az network vnet create --resource-group $rgName --name $vnetName --address-prefixes $addressPrefix --subnet-name $subnetName --subnet-prefixes $subnetIPRange --tags $tags
+az network vnet subnet update --resource-group $rgName --vnet-name $vnetName --name $subnetName --network-security-group $nsgName
+
+# Create a load balancer and needed configuration
+az network public-ip create --resource-group $rgName --location $location --name $lbPipName --allocation-method Static --sku Standard --tags $tags
+az network lb create --resource-group $rgName --name $lbName --sku Standard --frontend-ip-name "$vmssName-frontend" --backend-pool-name "$vmssName-Backend" --public-ip-address $lbPipName
+az network lb probe create --resource-group $rgName --lb-name $lbName --name "httpProbe" --protocol Http --port 80 --path /
+az network lb rule create --resource-group $rgName --lb-name $lbName --name "vmssRule" --protocol Tcp --frontend-port 80 --backend-port 80 --backend-pool-name "$vmssName-Backend" --probe-name "httpProbe"
+az network lb inbound-nat-pool create --resource-group $rgName --name "$vmssName-natPool" --lb-name $lbName --frontend-port-range-start 50000 --frontend-port-range-end 50099 --backend-port 22 --protocol Tcp
+
+# Create a VMSS
+az vmss create --resource-group $rgName --name $vmssName --image $galleryImageId --admin-username $adminUsername --admin-password $adminPassword --computer-name-prefix 'apress' --zones 1 2 3 --instance-count 2 --vm-sku $vmssSize --vnet-name $vnetName --subnet $subnetName --lb $lbName --backend-pool-name "$vmssName-Backend" --upgrade-policy-mode "Rolling" --health-probe "httpProbe"
+
+# Configure auto-scale profile and attach to the VMSS
+az monitor autoscale create --resource-group $rgName --location $location --resource $vmssName --resource-type Microsoft.Compute/virtualMachineScaleSets --name "auto-scale-profile" --min-count 2 --max-count 5 --count 2
+az monitor autoscale rule create --resource-group $rgName --autoscale-name "auto-scale-profile" --condition "Percentage CPU > 70 avg 5m" --scale out 1
+az monitor autoscale rule create --resource-group $rgName --autoscale-name "auto-scale-profile" --condition "Percentage CPU < 30 avg 5m" --scale in 1

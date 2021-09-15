@@ -1,0 +1,10 @@
+# Set variables
+$resourceGroupName  = "apress-ch09-rg"
+$profileName        = "apress-cdn"
+$endpointName       = "apress"
+
+# Create a CDN profile.
+az cdn profile create --resource-group $resourceGroupName --name $profileName --sku Standard_Microsoft
+
+# Create a CDN endpoint.
+az cdn endpoint create --resource-group $resourceGroupName --name $endpointName --profile-name $profileName --origin designthe.cloud

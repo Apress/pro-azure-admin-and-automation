@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "storageAccountName": {
+        "value": "apressch06standard"
+      },
+      "storageAccountType": {
+        "value": "StorageV2"
+      },
+      "storagePerformanceTier": {
+        "value": "Standard"
+      },
+      "blobContainerName":{
+        "value": "mycontainer"
+      },
+      "tags": {
+        "value": {
+          "deployment-method": "arm-template"
+            }
+        }
+    }
+}

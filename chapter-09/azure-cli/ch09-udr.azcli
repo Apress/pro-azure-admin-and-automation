@@ -1,0 +1,12 @@
+# Set variables
+$resourceGroupName  = "apress-ch09-rg"
+$routeTableName     = "apress01-vm-udr"
+$location           = "West Europe"
+$subnetName         = "vm-subnet"
+$vNetName           = "apress01-we-vnet"
+
+# Create UDR
+az network route-table create --name $routeTableName --resource-group $resourceGroupName -l $location
+
+# Associate UDR with Subnet
+az network vnet subnet update -g $resourceGroupName -n $subnetName --vnet-name $vNetName --route-table $routeTableName

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkName": {
+      "value": "apress-ch04-vnet"
+    },
+    "virtualNetworkAddressPrefix": {
+      "value": "10.123.0.0/16"
+    },
+    "subnetName": {
+      "value": "servers-subnet"
+    },
+    "subnetAddressPrefix": {
+      "value": "10.123.1.0/24"
+    },
+    "networkSecurityGroupName": {
+      "value": "apress-ch04-vnet-nsg"
+    },
+    "virtualMachineName": {
+      "value": "apress-ch04-linux"
+    },
+    "virtualMachineSize": {
+      "value": "Standard_B2s"
+    },
+    "ubuntuVersion": {
+      "value": "19.10-DAILY"
+    },
+    "OSDiskType": {
+      "value": "Premium_LRS"
+    },
+    "availabilityZone": {
+      "value": "1"
+    },
+    "tags": {
+      "value": {
+        "deployment-method": "arm-template"
+      }
+    },
+    "adminUsername": {
+      "value": "apressadmin"
+    },
+    "adminPassword": {
+      "value": "Pa$$w0rd1234"
+    }
+  }
+}

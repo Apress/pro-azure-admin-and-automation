@@ -1,0 +1,10 @@
+# Set variables
+$resourceGroupName = "apress-ch05-rg"
+$aksName           = "apress3"
+$nodeCount         = "1"
+$KubernetesVersion = "1.18.14"
+$NodeVmSize        = "Standard_B2ms"
+$DnsNamePrefix     = "apress3-dns"
+
+# Create AKS
+az aks create --resource-group $resourceGroupName --name $aksName --node-count $nodeCount --generate-ssh-keys --dns-name-prefix $DnsNamePrefix --node-vm-size $NodeVmSize --kubernetes-version $KubernetesVersion --network-plugin kubenet

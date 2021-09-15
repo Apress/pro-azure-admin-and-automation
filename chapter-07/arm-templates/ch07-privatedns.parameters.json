@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "privateDnsZoneName": {
+            "value": "designthe.local"
+        },
+        "vmRegistration": {
+            "value": "true"
+        },
+        "vnetId": {
+            "value": "/subscriptions/2348f252-5d66-4ed8-b6b3-86b9a5825ba7/resourceGroups/apress-ch07-rg/providers/Microsoft.Network/virtualNetworks/apress-ch03-vnet"
+        }
+    }
+}

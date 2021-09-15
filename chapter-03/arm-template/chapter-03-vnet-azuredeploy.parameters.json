@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetName": {
+            "value": "apress-ch03-vnet"
+        },
+        "vnetAddressPrefix": {
+            "value": "10.1.0.0/16"
+        },
+        "subnet01space": {
+            "value": "10.1.1.0/24"
+        },
+        "subnet01Name": {
+            "value": "app-vm-subnet"
+        },
+        "subnet02space": {
+            "value": "10.1.2.0/24"
+        },
+        "subnet02Name": {
+            "value": "db-vm-subnet"
+        }
+    }
+}

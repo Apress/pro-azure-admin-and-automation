@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetGatewayName": {
+            "type": "string",
+            "defaultValue": "vnet02-vngw"
+        },
+        "subnetId": {
+            "type": "string",
+            "defaultValue": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'apress02-we-vnet', 'GatewaySubnet')]"
+        }
+    },
+    "variables": {
+        "vngwPublicIpName": "[concat(parameters('vnetGatewayName'),'-pip')]"
+    },
+    "resources": [
+        {
+            "name": "[variables('vngwPublicIpName')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[concat(parameters('vnetGatewayName'),'-pip')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "name": "[parameters('vnetGatewayName')]",
+            "type": "Microsoft.Network/virtualNetworkGateways",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses',variables('vngwPublicIpName'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "vnetGatewayConfig",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[parameters('subnetId')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('vngwPublicIpName'))]"
+                            }
+                        }
+                    }
+                ],
+                "sku": {
+                    "name": "VpnGw2",
+                    "tier": "VpnGw2"
+                },
+                "gatewayType": "Vpn",
+                "vpnType": "RouteBased",
+                "enableBgp": false
+            }
+        }
+    ]
+}

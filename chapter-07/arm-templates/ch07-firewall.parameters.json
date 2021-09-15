@@ -1,0 +1,22 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "availabilityZones": {
+            "value": [
+                "1",
+                "2",
+                "3"
+            ]
+        },
+        "firewallName": {
+            "value": "apress02-fw"
+        },
+        "publicIpName": {
+            "value": "apress02-fw-pip"
+        },
+        "vnetName": {
+            "value": "apress04-ne-vnet"
+        }
+    }
+}

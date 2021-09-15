@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "vmssName": {
+        "value": "apressvmss"
+      },
+      "vmssSize": {
+        "value": "Standard_B1s"
+      },
+      "referenceImageId": {
+        "value": "/subscriptions/62cc79e0-66dd-4bb9-9aa0-77fdf43493da/resourceGroups/cmd-images/providers/Microsoft.Compute/galleries/image_gallery/images/learn-azure-nginx/versions/1.0.0"
+      },
+      "instanceCount": {
+        "value": 2
+      },
+      "loadBalancerSku": {
+        "value": "Standard"
+      },
+      "adminUsername": {
+        "value": "apressadmin"
+      },
+      "adminPassword": {
+        "value": "Pa$$w0rd1234"
+      }
+    }
+  }

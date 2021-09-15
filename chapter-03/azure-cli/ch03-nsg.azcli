@@ -1,0 +1,7 @@
+# Set variables
+$resourceGroup = "apress-ch03-rg"
+$nsgName       = "apress-db-vm-subnet-nsg"
+
+# Create Network Security Group
+az network nsg create -g $resourceGroup -n $nsgName
+az network nsg rule create --name allow-port-443 --nsg-name apress-app-vm-subnet-nsg --priority 110 --access Allow --source-port-ranges 443 --destination-port-ranges 443 -g $resourceGroup --access Allow

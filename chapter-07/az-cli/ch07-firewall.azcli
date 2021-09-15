@@ -1,0 +1,29 @@
+# Set variables
+$resourceGroupName  = "apress-ch07-rg"
+$vnetName           = "apress04-ne-vnet"
+$location           = "West Europe"
+$firewallName       = "apress-fw"
+$ipName             = "apress-fw-pip"
+
+az network firewall create \
+    --name $firewallName \
+    --resource-group $resourceGroupName \
+    --location $location
+az network public-ip create \
+    --name $ipName \
+    --resource-group $resourceGroupName \
+    --location $location \
+    --allocation-method static \
+    --sku standard
+az network firewall ip-config create \
+    --firewall-name $firewallName \
+    --name FW-config \
+    --public-ip-address $ipName \
+    --resource-group $resourceGroupName \
+    --vnet-name $vnetName
+az network firewall update \
+    --name $firewallName \
+    --resource-group $resourceGroupName 
+az network public-ip show \
+    --name $ipName \
+    --resource-group $resourceGroupName

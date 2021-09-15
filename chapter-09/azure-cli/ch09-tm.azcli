@@ -1,0 +1,13 @@
+# Set variables
+$resourceGroupName  = "apress-ch09-rg"
+$profileName        = "apress-tm-profile"
+$endpointName       = "apress"
+$location           = "West Europe"
+
+# Create Traffic manager profile
+az network traffic-manager profile create -g $resourceGroupName -n $profileName --routing-method Performance \
+    --unique-dns-name apress --ttl 30 --protocol HTTP --port 80 --path "/"
+
+# Create Traffic manager endpoint
+az network traffic-manager endpoint create -g $resourceGroupName --profile-name $profileName \
+    -n $endpointName --type azureEndpoints --target designthe.cloud --endpoint-status enabled

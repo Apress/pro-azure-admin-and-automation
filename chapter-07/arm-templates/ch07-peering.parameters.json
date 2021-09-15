@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnet01Name": {
+            "value": "apress01-we-vnet"
+        },
+        "vnet01SubnetName": {
+            "value": "vm-subnet"
+        },
+        "vnet02Name": {
+            "value": "apress02-we-vnet"
+        },
+        "vnet02SubnetName": {
+            "value": "vm-subnet"
+        },
+        "vnet03Name": {
+            "value": "apress03-ne-vnet"
+        },
+        "vnet03SubnetName": {
+            "value": "vm-subnet"
+        }
+    }
+}

@@ -1,0 +1,4 @@
+{
+    "fileUris": ["https://apressazurebook.blob.core.windows.net/scripts/install-nginx.sh"],
+    "commandToExecute": "sh install-nginx.sh"
+  }

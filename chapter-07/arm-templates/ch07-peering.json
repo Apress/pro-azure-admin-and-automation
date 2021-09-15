@@ -1,0 +1,158 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnet01Name": {
+            "type": "string",
+            "defaultValue": "apress01-we-vnet"
+        },
+        "vnet01SubnetName": {
+            "type": "string",
+            "defaultValue": "vm-subnet"
+        },
+        "vnet02Name": {
+            "type": "string",
+            "defaultValue": "apress02-we-vnet"
+        },
+        "vnet02SubnetName": {
+            "type": "string",
+            "defaultValue": "vm-subnet"
+        },
+        "vnet03Name": {
+            "type": "string",
+            "defaultValue": "apress03-ne-vnet"
+        },
+        "vnet03SubnetName": {
+            "type": "string",
+            "defaultValue": "vm-subnet"
+        }
+    },
+    "functions": [],
+    "variables": {
+        "vnet01IpPrefix"      : "192.168.10.0/24",
+        "vnet01SubnetIpPrefix": "192.168.10.0/24",
+        "vnet02IpPrefix"      : "192.168.11.0/24",
+        "vnet02SubnetIpPrefix": "192.168.11.0/24",
+        "vnet03IpPrefix"      : "192.168.20.0/24",
+        "vnet03SubnetIpPrefix": "192.168.20.0/24"
+    },
+    "resources": [
+        {
+            "name": "[parameters('vnet01Name')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[parameters('vnet01Name')]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('vnet01IpPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('vnet01SubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[variables('vnet01SubnetIpPrefix')]"
+                        }
+                    }
+                ]
+            },
+            "resources": [
+                {
+                    "apiVersion": "2020-05-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "[concat(parameters('vnet01Name'),'-to-',parameters('vnet02Name'))]",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('vnet01Name'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('vnet02Name'))]"
+                    ],
+                    "comments": "This is the peering from vNet 01 to vNet 02",
+                    "properties": {
+                        "allowVirtualNetworkAccess": true,
+                        "allowForwardedTraffic": false,
+                        "allowGatewayTransit": false,
+                        "useRemoteGateways": false,
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnet02Name'))]"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "[parameters('vnet02Name')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "[parameters('vnet02Name')]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('vnet02IpPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('vnet02SubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[variables('vnet02SubnetIpPrefix')]"
+                        }
+                    }
+                ]
+            },
+            "resources": [
+                {
+                    "apiVersion": "2020-05-01",
+                    "type": "virtualNetworkPeerings",
+                    "name": "[concat(parameters('vnet02Name'),'-to-',parameters('vnet01Name'))]",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('vnet01Name'))]",
+                        "[resourceId('Microsoft.Network/virtualNetworks/', parameters('vnet02Name'))]"
+                    ],
+                    "comments": "This is the peering from vNet 02 to vNet 01",
+                    "properties": {
+                        "allowVirtualNetworkAccess": true,
+                        "allowForwardedTraffic": false,
+                        "allowGatewayTransit": false,
+                        "useRemoteGateways": false,
+                        "remoteVirtualNetwork": {
+                            "id": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnet01Name'))]"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "[parameters('vnet03Name')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-11-01",
+            "location": "North Europe",
+            "tags": {
+                "displayName": "[parameters('vnet03Name')]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('vnet03IpPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('vnet03SubnetName')]",
+                        "properties": {
+                            "addressPrefix": "[variables('vnet03SubnetIpPrefix')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}

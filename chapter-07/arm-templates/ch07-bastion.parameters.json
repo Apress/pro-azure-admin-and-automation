@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "West Europe"
+        },
+        "resourceGroup": {
+            "value": "apress-ch07-rg"
+        },
+        "bastionHostName": {
+            "value": "apress-bastion"
+        },
+        "subnetId": {
+            "value": "/subscriptions/2348f252-5d66-4ed8-b6b3-86b9a5825ba7/resourceGroups/apress-ch07-rg/providers/Microsoft.Network/virtualNetworks/apress04-ne-vnet/subnets/AzureBastionSubnet"
+        },
+        "publicIpAddressName": {
+            "value": "apress-bastion-pip"
+        }
+    }
+}

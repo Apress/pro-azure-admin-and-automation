@@ -1,0 +1,7 @@
+# Set variables
+$resourceGroupName  = "apress-ch09-rg"
+$apgwName           = "apress-apgw"
+$location           = "West Europe"
+
+# Create Application gateway
+az network application-gateway create --capacity 2 --frontend-port 80 --location $location --name $apgwName --public-ip-address apgw-pip --resource-group $resourceGroupName --sku Standard_v2 --subnet apgw-subnet --vnet-name apress-apgw-vnet

@@ -1,0 +1,26 @@
+# Set variables
+$resourceGroupName  = "apress-ch07-rg"
+$vnet01Name         = "apress01-we-vnet"
+$vnet02Name         = "apress02-we-vnet"
+
+# Get the id for vnet01.
+$vNet01Id = $(az network vnet show --resource-group $resourceGroupName --name $vnet01Name --query id --out tsv)
+
+# Get the id for vnet02.
+$vNet02Id = $(az network vnet show --resource-group $resourceGroupName --name $vnet02Name --query id --out tsv)
+
+# Create peering on the source side
+az network vnet peering create \
+  --name $vnet01Name'-to-'$vnet02Name \
+  --resource-group $resourceGroupName \
+  --vnet-name $vnet01Name \
+  --remote-vnet $vNet02Id \
+  --allow-vnet-access
+
+# Create peering on the destination side
+az network vnet peering create \
+  --name $vnet02Name'-to-'$vnet01Name \
+  --resource-group $resourceGroupName \
+  --vnet-name $vnet02Name \
+  --remote-vnet $vNet01Id \
+  --allow-vnet-access

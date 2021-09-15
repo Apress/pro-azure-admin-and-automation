@@ -1,0 +1,8 @@
+# Set variables
+$resourceGroup   = "apress-ch03-rg"
+$location        = "westeurope"
+$publicIpName    = "apress-ch03-pip"
+$domainNameLabel = "apress-vm01"
+
+# Create Public IP Address
+az network public-ip create -g $resourceGroup -n $publicIpName --dns-name $domainNameLabel --allocation-method Static

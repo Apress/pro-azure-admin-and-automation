@@ -1,0 +1,6 @@
+# Set variables
+$resourceGroupName  = "apress-ch09-rg"
+$lbName             = "apress-lb"
+
+# Create Load balancer
+az network lb create -g $resourceGroupName -n $lbName --sku Standard --public-ip-address-allocation Static

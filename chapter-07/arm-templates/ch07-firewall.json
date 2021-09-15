@@ -1,0 +1,75 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "availabilityZones": {
+            "type": "array",
+            "defaultValue": [
+                "1",
+                "2",
+                "3"
+            ],
+            "metadata": {
+                "description": "Zone numbers e.g. 1,2,3."
+            }
+        },
+        "firewallName": {
+            "type": "string",
+            "defaultValue": "apress02-fw"
+        },
+        "publicIpName": {
+            "type": "string",
+            "defaultValue": "apress02-fw-pip"
+        },
+        "vnetName": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('firewallName')]",
+            "type": "Microsoft.Network/azureFirewalls",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "zones": "[if(equals(length(parameters('availabilityZones')), 0), json('null'), parameters('availabilityZones'))]",
+            "tags": {
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfigName",
+                        "properties": {
+                            "subnet": {
+                                "id": "[resourceId('apress-ch07-rg', 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'AzureFirewallSubnet')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))]"
+                            }
+                        }
+                    }
+                ]
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))]"
+            ]
+        },
+        {
+            "name": "[parameters('publicIpName')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "standard"
+            },
+            "tags": {
+                "createdFor": "[parameters('firewallName')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "dnsSettings": {
+                    "domainNameLabel": "[concat(parameters('firewallName'), uniqueString(resourceGroup().id))]"
+                }
+            }
+        }
+    ]
+}

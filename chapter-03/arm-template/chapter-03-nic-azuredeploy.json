@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources that will be deployed."
+            }
+        },
+        "nicName": {
+                "type": "string",
+                "metadata": {
+                    "description": "NIC name"
+                }
+        },
+        "privateIPAllocationMethod": {
+            "type": "string",
+            "defaultValue": "Static",
+            "metadata": {
+                "description": "Dynamic or Static allocation"
+            }
+        },
+        "privateIP": {
+            "type": "string",
+            "metadata": {
+                "description": "Reserved IP address"
+            }
+        },
+        "subnetID": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource ID of our subnet"
+            }
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('nicName')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2020-06-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('nicName')]"
+            },
+            "dependsOn": [],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfig1",
+                        "properties": {
+                            "privateIPAddressVersion": "IPv4",
+                            "privateIPAllocationMethod": "[parameters('privateIPAllocationMethod')]",
+                            "subnet": {
+                                "id": "[parameters('subnetID')]"
+                            },
+                            "privateIPAddress": "[parameters('privateIP')]"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}

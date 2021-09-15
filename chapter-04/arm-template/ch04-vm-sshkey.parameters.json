@@ -1,0 +1,44 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkName": {
+      "value": "apress-ch04-vnet"
+    },
+    "virtualNetworkAddressPrefix": {
+      "value": "10.123.0.0/16"
+    },
+    "subnetName": {
+      "value": "servers-subnet"
+    },
+    "subnetAddressPrefix": {
+      "value": "10.123.1.0/24"
+    },
+    "networkSecurityGroupName": {
+      "value": "apress-ch04-vnet-nsg"
+    },
+    "virtualMachineName": {
+      "value": "apress-ch04-linux"
+    },
+    "virtualMachineSize": {
+      "value": "Standard_B2s"
+    },
+    "ubuntuVersion": {
+      "value": "19.10-DAILY"
+    },
+    "OSDiskType": {
+      "value": "Premium_LRS"
+    },
+    "tags": {
+      "value": {
+        "deployment-method": "arm-template"
+      }
+    },
+    "adminUsername": {
+      "value": "apressadmin"
+    },
+    "adminSshKey": {
+      "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDOYxtsvTZLEVnSoET6j4AZLFFS++AMYSUDr56qBKQYjpCLraxb8lblSBvkAd4bKi2hbJ9wX1DTdfyi6Lbr/H4z0JyRAr47dtRf+UMXdGbz36GukjDOcf6Zv25sZl0sR0L8Gy8FuWfBi7EFeSNhYW6jbibtTGeVuTi9TdeYz/4mKMWdPcQMWbSugGH/e8eChjt2WGpwhhxcPrj9h8PELCd7Fsrjz1sUdTnT2jChPIWodFBxq1of6fJk00qEpCxXUEGg/YNtF8fcLPqR9OlIuzecfA/rW2wcO2zJrN7fXzgezmG8GQu1ZiIWbyi6CS5FZgBkvDk0G29/Zhdq5izBywD1"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+# Parameters
+$resourceGroupName = "apress-ch07-rg"
+$vnet01Name        = "apress01-we-vnet"
+$vnet02Name        = "apress02-we-vnet"
+$location          = "West Europe"
+$vngw01Name        = "vnet01-vngw"
+$vngw02Name        = "vnet02-vngw"
+$vngw01PipName     = "$vngw01Name-pip"
+$vngw02PipName     = "$vngw02Name-pip"
+
+# Create Public IPs
+az network public-ip create -n $vngw01PipName -g $resourceGroupName --allocation-method Dynamic
+az network public-ip create -n $vngw02PipName -g $resourceGroupName --allocation-method Dynamic
+
+# Creating Gateway
+az network vnet-gateway create -n $vngw01Name -l $location --public-ip-address $vngw01PipName -g $resourceGroupName --vnet $vnet01Name --gateway-type Vpn --sku VpnGw2 --vpn-type RouteBased --no-wait
+az network vnet-gateway create -n $vngw02Name -l $location --public-ip-address $vngw02PipName -g $resourceGroupName --vnet $vnet02Name --gateway-type Vpn --sku VpnGw2 --vpn-type RouteBased --no-wait
+
+# Putting the vngw ID inside the variable
+$vngw01Id = $(az network vnet-gateway show --resource-group $resourceGroupName --name $vngw01Name --query id --out tsv)
+$vngw02Id = $(az network vnet-gateway show --resource-group $resourceGroupName --name $vngw02Name --query id --out tsv)
+
+# Creating a connection
+az network vpn-connection create -n VNet01-To-VNet02 -g $resourceGroupName --vnet-gateway1 $vngw01Id -l $location --shared-key "Apress4Azure" --vnet-gateway2 $vngw02Id
+az network vpn-connection create -n VNet02-To-VNet01 -g $resourceGroupName --vnet-gateway1 $vngw02Id -l $location --shared-key "Apress4Azure" --vnet-gateway2 $vngw01Id

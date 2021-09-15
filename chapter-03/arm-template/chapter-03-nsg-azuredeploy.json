@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "nsgName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name for NSG"
+            }
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('nsgName')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2019-11-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "allow-port-80",
+                        "properties": {
+                            "description": "Allow port 80 on VM",
+                            "protocol": "Tcp",
+                            "sourcePortRange": "80",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 100,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {}
+}

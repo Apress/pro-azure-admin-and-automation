@@ -1,0 +1,10 @@
+# Set variables
+$resourceGroupName  = "apress-ch07-rg"
+$dnsZoneName        = "designthe.cloud"
+$location           = "West Europe"
+
+# Create a resource group
+az group create --name $resourceGroupName --location $location
+
+# Create a DNS zone
+az network dns zone create -g $resourceGroupName -n $dnsZoneName

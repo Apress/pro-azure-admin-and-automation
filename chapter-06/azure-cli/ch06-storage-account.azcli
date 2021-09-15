@@ -1,0 +1,13 @@
+# Setting the variables
+$resourceGroup      = 'apress-ch06-rg'
+$location           = 'northeurope'
+$storageAccountName = 'apressch06standard'
+$storageAccountType = 'StorageV2'
+$storageAccountSku  = 'Standard_LRS'
+$tags               = 'deployment-method=azure-cli'
+
+# Creating a resource group
+az group create --name $resourceGroup --location $location --tags $tags
+
+# Creating a storage account
+az storage account create --resource-group $resourceGroup --location $location --name $storageAccountName --sku $storageAccountSku --kind $storageAccountType --tags $tags

@@ -1,0 +1,49 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "string",
+            "maxLength": 24
+        },
+        "storageAccountType": {
+            "type": "string"
+        },
+        "storagePerformanceTier": {
+            "type": "string"
+        },
+        "fileShareName": {
+            "type": "string"
+        },
+        "tags": {
+            "type": "object"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "tags": "[parameters('tags')]",
+            "location": "[resourceGroup().location]",
+            "kind": "[parameters('storageAccountType')]",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "[parameters('storagePerformanceTier')]"
+            },
+            "resources": [
+                {
+                    "type": "fileServices/shares",
+                    "apiVersion": "2019-06-01",
+                    "name": "[concat('default/', parameters('fileShareName'))]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+                    ]
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}

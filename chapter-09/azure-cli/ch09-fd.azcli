@@ -1,0 +1,9 @@
+# Set variables
+$resourceGroupName  = "apress-ch09-rg"
+
+# Create Azure Front door
+az network front-door create \
+--resource-group $resourceGroupName \
+--name apress-fd \
+--accepted-protocols http https \
+--backend-address "designthe.cloud"

@@ -1,0 +1,9 @@
+# Set variables
+$resourceGroupName     = "apress-ch05-rg"
+$containerInstanceName = "apress"
+$imageName             = "mcr.microsoft.com/azuredocs/aci-helloworld:latest"
+$osType                = "Linux"
+$DnsNameLabel          = "apress"
+
+# Create ACI
+az container create --resource-group $resourceGroupName --name $containerInstanceName --image $imageName --dns-name-label $DnsNameLabel --ports 80

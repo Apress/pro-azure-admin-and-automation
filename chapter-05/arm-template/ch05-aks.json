@@ -1,0 +1,71 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "type": "string"
+        },
+        "dnsPrefix": {
+            "type": "string"
+        },
+        "servicePrincipalAppId": {
+            "type": "string"
+        },
+        "servicePrincipalAppPassword": {
+            "type": "string"
+        },
+        "enableHttpApplicationRouting": {
+            "type": "bool",
+            "defaultValue": true
+        },
+        "enableAzurePolicy": {
+            "type": "bool",
+            "defaultValue": false
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('clusterName')]",
+            "type": "Microsoft.ContainerService/managedClusters",
+            "apiVersion": "2020-02-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "kubernetesVersion": "1.18.14",
+                "dnsPrefix": "[parameters('dnsPrefix')]",
+                "agentPoolProfiles": [
+                    {
+                        "name": "agentpool",
+                        "count": 1,
+                        "vmSize": "Standard_B2ms",
+                        "osType": "Linux",
+                        "storageProfile": "ManagedDisks",
+                        "type": "VirtualMachineScaleSets",
+                        "mode": "System",
+                        "maxPods": 110,
+                        "availabilityZones": [
+                            "1",
+                            "2",
+                            "3"
+                        ]
+                    }
+                ],
+                "servicePrincipalProfile": {
+                    "clientId": "[parameters('servicePrincipalAppId')]",
+                    "secret": "[parameters('servicePrincipalAppPassword')]"
+                },
+                "addonProfiles": {
+                    "httpApplicationRouting": {
+                        "enabled": "[parameters('enableHttpApplicationRouting')]"
+                    },
+                    "azurePolicy": {
+                        "enabled": "[parameters('enableAzurePolicy')]"
+                    }
+                },
+                "networkProfile": {
+                    "networkPlugin": "kubenet",
+                    "loadBalancerSku": "Standard"
+                }
+            }
+        }
+    ]
+}

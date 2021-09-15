@@ -1,0 +1,106 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "VNet name"
+            }
+        },
+        "vnetAddressPrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Address prefix"
+            }
+        },
+        "subnet01space": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet 01 address space prefix"
+            }
+        },
+        "subnet01Name": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet 01 Name"
+            }
+        },
+        "subnet02space": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet 02 address space prefix"
+            }
+        },
+        "subnet02Name": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet 02 Name"
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources that will be deployed."
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('vnetName')]",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-06-01",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "[parameters('vnetName')]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[parameters('vnetAddressPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[parameters('subnet01Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnet01space')]",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "westeurope",
+                                        "northeurope"
+                                    ]
+                                }
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    },
+                    {
+                        "name": "[parameters('subnet02Name')]",
+                        "properties": {
+                            "addressPrefix": "[parameters('subnet02space')]",
+                            "serviceEndpoints": [
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "westeurope",
+                                        "northeurope"
+                                    ]
+                                }
+                            ],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ]
+            }
+        }   
+    ],
+    "outputs": {}
+}

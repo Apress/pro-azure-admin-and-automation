@@ -1,0 +1,37 @@
+# Set variables
+$location           = 'northeurope'
+$rgName             = 'apress-ch04-rg'
+$vnetName           = 'apress-ch04-vnet'
+$subnetName         = 'server-subnet'
+$addressPrefix      = '10.123.0.0/16'
+$subnetIPRange      = '10.123.1.0/24'
+$nsgName            = "$vnetName-nsg"
+$vmName             = 'apress-ch04-linux'
+$vmSize             = 'Standard_D2s_v3'
+$OSImage            = 'Canonical:UbuntuServer:19.10-DAILY:latest'
+$availabilityZone   = '2'
+$storageAccountName = 'apressch04diagstorage'
+$adminUser          = 'apressadmin'
+$adminPassword      = 'Pa$$w0rd1234'
+$tags               = 'deployment-method=azure-cli'
+
+# Create a resource group
+az group create --name $rgName --location $location --tags $tags
+
+# Create a virtual network, subnet, and network security group that will be attached to the subnet
+az network nsg create --name $nsgName --resource-group $rgName --location $location --tags $tags
+
+az network nsg rule create --resource-group $rgName --nsg-name $nsgName --name allow-remote-access --priority 100 --source-address-prefixes * --destination-port-ranges 22 --destination-address-prefixes * --access Allow --protocol Tcp
+
+az network vnet create --resource-group $rgName --name $vnetName --address-prefixes $addressPrefix --subnet-name $subnetName --subnet-prefixes $subnetIPRange --tags $tags
+
+az network vnet subnet update --resource-group $rgName --vnet-name $vnetName --name $subnetName --network-security-group $nsgName
+
+# Create a Linux virtual machine and all needed resources
+az network public-ip create --resource-group $rgName --location $location --name "$vmName-pip" --allocation-method Static --sku Basic --zone $availabilityZone --tags $tags
+
+az network nic create --resource-group $rgName --location $location --name "$vmName-nic" --vnet-name $vnetName --subnet $subnetName --public-ip-address "$vmName-pip" --tags $tags
+
+az storage account create --resource-group $rgName --location $location --name $storageAccountName --access-tier Hot --sku Standard_LRS --kind StorageV2 --tags $tags
+
+az vm create --resource-group $rgName --name $vmName --location $location --nics "$vmName-nic" --os-disk-name "$vmName-OsDisk" --image $OSImage --size $vmSize --boot-diagnostics-storage $storageAccountName --admin-username $adminUser --admin-password $adminPassword --zone $availabilityZone --tags $tags

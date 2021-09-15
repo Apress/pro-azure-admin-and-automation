@@ -1,0 +1,7 @@
+# Set variables
+$resourceGroupName     = "apress-ch05-rg"
+$sku                   = "Standard"
+$containerRegistryName = "apress-ch05-win-plan"
+
+# Create ACR
+az acr create --resource-group $resourceGroupName --name $containerRegistryName --sku $sku

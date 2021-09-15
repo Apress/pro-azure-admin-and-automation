@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "westeurope"
+        },
+        "applicationGatewayName": {
+            "value": "apress-apgw"
+        },
+        "tier": {
+            "value": "Standard_v2"
+        },
+        "skuSize": {
+            "value": "Standard_v2"
+        },
+        "capacity": {
+            "value": 0
+        },
+        "subnetName": {
+            "value": "default"
+        },
+        "zones": {
+            "value": []
+        },
+        "virtualNetworkName": {
+            "value": "apress-vngw-vnet"
+        },
+        "virtualNetworkPrefix": {
+            "value": [
+                "10.2.0.0/16"
+            ]
+        },
+        "publicIpAddressName": {
+            "value": "apress-vngw-pip"
+        },
+        "sku": {
+            "value": "Standard"
+        },
+        "allocationMethod": {
+            "value": "Static"
+        },
+        "publicIpZones": {
+            "value": []
+        },
+        "autoScaleMaxCapacity": {
+            "value": 4
+        }
+    }
+}

@@ -1,0 +1,14 @@
+# Set variables
+$resourceGroupName  = "apress-ch07-rg"
+$dnsZoneName        = "designthe.cloud"
+$location           = "West Europe"
+$vnetName           = "apress-ch03-vnet"
+
+# Create a resource group
+az group create --name $resourceGroupName --location $location
+
+# Create Private DNS Zone
+az network private-dns zone create -g $resourceGroupName -n $dnsZoneName
+
+# Create a link between Zone and VNet
+az network private-dns link vnet create -g $resourceGroupName -n newDnsLink -z $dnsZoneName -v $vnetName -e true

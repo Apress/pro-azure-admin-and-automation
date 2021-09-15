@@ -1,0 +1,10 @@
+# Set variables
+$resourceGroupName  = "apress-ch05-rg"
+$location           = "westeurope"
+$appServicePlanName = "apress-ch05-win-plan"
+
+# Create a resource group.
+az group create --location $location --name $resourceGroupName
+
+# Create an App Service plan in `Basic` tier.
+az appservice plan create --name $appServicePlanName --resource-group $resourceGroupName --sku BASIC

@@ -1,0 +1,7 @@
+# Set variables
+$resourceGroupName  = "apress-ch05-rg"
+$appServicePlanName = "apress-ch05-win-plan"
+$webAppName         = "apress"
+
+# Create a web app.
+az webapp create --name $webAppName --resource-group $resourceGroupName --plan $appServicePlanName

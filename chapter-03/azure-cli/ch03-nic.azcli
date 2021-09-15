@@ -1,0 +1,10 @@
+# Set variables
+$resourceGroup = "apress-ch03-rg"
+$location      = "westeurope"
+$appSubnetName = "app-vm-subnet"
+$vnetName      = "apress-ch03-vnet"
+$nicName       = "apress-vm01-nic"
+$nicReservedIp = "10.1.1.4"
+
+# Create network interface card
+az network nic create --name $nicName --resource-group $resourceGroup --vnet-name $vnetName --subnet $appSubnetName --private-ip-address $nicReservedIp

@@ -1,0 +1,12 @@
+# Set variables
+$resourceGroupName  = "apress-ch07-rg"
+$vnetName           = "apress04-ne-vnet"
+$location           = "West Europe"
+$bastionName        = "apress-bastion"
+$PublicIpName       = "apress-bastion-pip"
+
+# Create public IP
+az network public-ip create --resource-group $resourceGroupName --name $PublicIpName --sku Standard --location $location
+
+# Create Bastion
+az network bastion create --name $bastionName --public-ip-address $PublicIpName --resource-group $resourceGroupName --vnet-name $vnetName --location $location

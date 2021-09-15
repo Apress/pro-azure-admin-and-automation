@@ -1,0 +1,7 @@
+# Setting the variables
+$resourceGroup      = 'apress-ch06-rg'
+$storageAccountName = 'apressch06standard'
+$blobContainerName  = 'mycontainer'
+
+# Creating a blob container
+az storage container create --resource-group $resourceGroup --account-name $storageAccountName --name $blobContainerName

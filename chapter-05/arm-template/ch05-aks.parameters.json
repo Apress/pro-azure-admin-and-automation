@@ -1,0 +1,24 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "apress2"
+        },
+        "dnsPrefix": {
+            "value": "apress2-dns"
+        },
+        "servicePrincipalAppId": {
+            "value": "f409c03f-55b1-4c07-8d00-635d6b267ced"
+        },
+        "servicePrincipalAppPassword": {
+            "value": "42W7zAzE-PYB~kg6~4ino26c-0S857_G_8"
+        },
+        "enableHttpApplicationRouting": {
+            "value": false
+        },
+        "enableAzurePolicy": {
+            "value": false
+        }
+    }
+}

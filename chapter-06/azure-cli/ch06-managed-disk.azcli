@@ -1,0 +1,13 @@
+# Setting the variables
+$resourceGroup = 'apress-ch06-rg'
+$location      = 'northeurope'
+$diskName      = 'apress-P10-premium'
+$diskSku       = 'Premium_LRS'
+$diskSize      = 128
+$tags          = 'deployment-method=azure-cli'
+
+# Creating a resource group
+az group create --name $resourceGroup --location $location --tags $tags
+
+# Creating a managed disk
+az disk create --resource-group $resourceGroup --name $diskName --size-gb $diskSize --sku $diskSku --tags $tags 

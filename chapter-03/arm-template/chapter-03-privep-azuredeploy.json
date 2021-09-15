@@ -1,0 +1,88 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "privateEndpointName": {
+            "type": "string"
+        },
+        "privateLinkResource": {
+            "type": "string"
+        },
+        "targetSubResource": {
+            "type": "array"
+        },
+        "subnet": {
+            "type": "string"
+        },
+        "privateDnsDeploymentName": {
+            "type": "string"
+        }
+    },
+    "resources": [
+        {
+            "location": "[parameters('location')]",
+            "name": "[parameters('privateEndpointName')]",
+            "type": "Microsoft.Network/privateEndpoints",
+            "apiVersion": "2020-03-01",
+            "properties": {
+                "subnet": {
+                    "id": "[parameters('subnet')]"
+                },
+                "privateLinkServiceConnections": [
+                    {
+                        "name": "[parameters('privateEndpointName')]",
+                        "properties": {
+                            "privateLinkServiceId": "[parameters('privateLinkResource')]",
+                            "groupIds": "[parameters('targetSubResource')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[parameters('privateDnsDeploymentName')]",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "[parameters('privateEndpointName')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "apiVersion": "2017-05-10",
+                            "name": "PrivateDnsZone-3e51f3f9-a76d-4ae3-b8cb-2c652307b022",
+                            "type": "Microsoft.Resources/deployments",
+                            "subscriptionId": "2348f252-5d66-4ed8-b6b3-86b9a5825ba7",
+                            "resourceGroup": "apress-ch03-rg",
+                            "properties": {
+                                "mode": "Incremental",
+                                "template": {
+                                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                    "contentVersion": "1.0.0.0",
+                                    "resources": [
+                                        {
+                                            "type": "Microsoft.Network/privateDnsZones",
+                                            "apiVersion": "2018-09-01",
+                                            "name": "privatelink.blob.core.windows.net",
+                                            "location": "global",
+                                            "tags": {},
+                                            "properties": {}
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

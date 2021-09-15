@@ -1,0 +1,19 @@
+# Set variables
+$resourceGroup    = "apress-ch03-rg"
+$location         = "westeurope"
+$addressSpace     = "10.1.0.0/16"
+$subnetIpRangeApp = "10.1.1.0/24"
+$subnetIpRangeDb  = "10.1.2.0/24"
+$appSubnetName    = "app-vm-subnet"
+$dbSubnetName     = "db-vm-subnet"
+$vnetName         = "apress-ch03-vnet"
+
+#V1 This way we can create only one subnet
+az network vnet create --name $vnetName --resource-group $resourceGroup --address-prefix $addressSpace --subnet-name $appSubnetName --subnet-prefix $subnetIpRangeApp
+
+#V2 This way we first create VNet and then 2 subnets
+az network vnet create --name $vnetName --resource-group $resourceGroup --address-prefix $addressSpace
+
+az network vnet subnet create -g $resourceGroup --vnet-name $vnetName -n $appSubnetName --address-prefixes $subnetIpRangeApp
+
+az network vnet subnet create -g $resourceGroup --vnet-name $vnetName -n $dbSubnetName --address-prefixes $subnetIpRangeDb
